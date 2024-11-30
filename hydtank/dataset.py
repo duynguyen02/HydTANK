@@ -2,15 +2,23 @@ import copy
 from datetime import datetime
 from typing import List
 
+from hydutils.hyd_constants import (
+    TIMESERIES,
+    PRECIPITATION,
+    EVAPOTRANSPIRATION,
+    DISCHARGE,
+)
 import pandas as pd
-
-from hydtank.columns_constants import TIME_SERIES, PRECIPITATION, EVAPOTRANSPIRATION, DISCHARGE
 
 
 class Dataset:
-    def __init__(self, time_series: List[datetime], precipitation: List[float],
-                 evapotranspiration: List[float],
-                 discharge: List[float]):
+    def __init__(
+        self,
+        time_series: List[datetime],
+        precipitation: List[float],
+        evapotranspiration: List[float],
+        discharge: List[float],
+    ):
         self._time_series = time_series
         self._precipitation = precipitation
         self._evapotranspiration = evapotranspiration
@@ -18,14 +26,14 @@ class Dataset:
 
     def to_dataframe(self):
         dataset_dict = {
-            TIME_SERIES: self._time_series,
+            TIMESERIES: self._time_series,
             PRECIPITATION: self._precipitation,
             EVAPOTRANSPIRATION: self._evapotranspiration,
-            DISCHARGE: self._discharge
+            DISCHARGE: self._discharge,
         }
 
         df = pd.DataFrame(dataset_dict)
-        df[TIME_SERIES] = pd.to_datetime(df[TIME_SERIES])
+        df[TIMESERIES] = pd.to_datetime(df[TIMESERIES])
         return df
 
     def copy(self):
