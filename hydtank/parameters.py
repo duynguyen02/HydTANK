@@ -1,7 +1,7 @@
 import copy
 import dataclasses
 import json
-from abc import ABC, abstractmethod
+from abc import ABC
 
 import numpy as np
 
