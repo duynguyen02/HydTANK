@@ -2,8 +2,8 @@ from typing import Optional, List
 
 import numpy as np
 
-from .basin_def import BasinDef
-from .parameters import SubbasinParameters
+from hydtank.basin_def import BasinDef
+from hydtank.parameters import SubbasinParameters
 
 
 class Subbasin(BasinDef):

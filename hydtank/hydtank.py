@@ -11,14 +11,14 @@ from PIL import Image
 from matplotlib import pyplot as plt
 from scipy.optimize import minimize
 
-from .basin_def import BasinDef
-from .bsd_junction import Junction
-from .bsd_reach import Reach
-from .bsd_sink import Sink
-from .bsd_subbasin import Subbasin
-from .columns_constants import TIME_SERIES, INTERVAL, PRECIPITATION, EVAPOTRANSPIRATION, DISCHARGE
-from .dataset import Dataset
-from .parameters import Parameters, SubbasinParameters, ReachParameters
+from hydtank.basin_def import BasinDef
+from hydtank.bsd_junction import Junction
+from hydtank.bsd_reach import Reach
+from hydtank.bsd_sink import Sink
+from hydtank.bsd_subbasin import Subbasin
+from hydtank.columns_constants import TIME_SERIES, INTERVAL, PRECIPITATION, EVAPOTRANSPIRATION, DISCHARGE
+from hydtank.dataset import Dataset
+from hydtank.parameters import Parameters, SubbasinParameters, ReachParameters
 
 
 def validate_columns_data(df: pd.DataFrame):

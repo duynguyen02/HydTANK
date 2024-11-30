@@ -1,8 +1,8 @@
 from typing import Optional, List
 
-from .basin_def import BasinDef
-from .bsd_flow_node import FlowNode
-from .parameters import JunctionParameters
+from hydtank.basin_def import BasinDef
+from hydtank.bsd_flow_node import FlowNode
+from hydtank.parameters import JunctionParameters
 
 
 class Junction(FlowNode):

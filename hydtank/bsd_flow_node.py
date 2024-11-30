@@ -1,6 +1,6 @@
 import numpy as np
 
-from .basin_def import BasinDef
+from hydtank.basin_def import BasinDef
 
 
 class FlowNode(BasinDef):

@@ -4,7 +4,7 @@ from typing import List
 
 import pandas as pd
 
-from .columns_constants import TIME_SERIES, PRECIPITATION, EVAPOTRANSPIRATION, DISCHARGE
+from hydtank.columns_constants import TIME_SERIES, PRECIPITATION, EVAPOTRANSPIRATION, DISCHARGE
 
 
 class Dataset:

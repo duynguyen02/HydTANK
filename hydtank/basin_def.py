@@ -3,8 +3,8 @@ from typing import Optional, List
 
 import numpy as np
 
-from .parameters import Parameters
-from .statistics import Statistics
+from hydtank.parameters import Parameters
+from hydtank.statistics import Statistics
 
 
 class BasinDef:

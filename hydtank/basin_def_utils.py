@@ -7,12 +7,12 @@ basin definition objects with their relationships.
 """
 
 from typing import List, Optional, Dict, Tuple, Any
-from .basin_def import BasinDef
-from .bsd_junction import Junction
-from .bsd_reach import Reach
-from .bsd_sink import Sink
-from .bsd_subbasin import Subbasin
-from .parameters import ReachParameters
+from hydtank.basin_def import BasinDef
+from hydtank.bsd_junction import Junction
+from hydtank.bsd_reach import Reach
+from hydtank.bsd_sink import Sink
+from hydtank.bsd_subbasin import Subbasin
+from hydtank.parameters import ReachParameters
 
 
 def extract_basin_file_data(content: str) -> List[Dict[str, str]]:
