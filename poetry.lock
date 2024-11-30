@@ -162,6 +162,20 @@ unicode = ["unicodedata2 (>=15.1.0)"]
 woff = ["brotli (>=1.0.1)", "brotlicffi (>=0.8.0)", "zopfli (>=0.1.4)"]
 
 [[package]]
+name = "hydutils"
+version = "1.0.0"
+description = "HydUtils is a Python utility library designed for data handling and validation, especially for time series and hydrological datasets."
+optional = false
+python-versions = "<4.0,>=3.10"
+files = [
+    {file = "hydutils-1.0.0-py3-none-any.whl", hash = "sha256:a7efc24c81b10be48243bec60e52449339cc6db72779d347493f692415ab22d6"},
+    {file = "hydutils-1.0.0.tar.gz", hash = "sha256:59eb0d1d421e6d27e1d88ef9621855ad102ffbfe8911ff8485fc88e9f003f639"},
+]
+
+[package.dependencies]
+pandas = ">=2.2.3,<3.0.0"
+
+[[package]]
 name = "kiwisolver"
 version = "1.4.7"
 description = "A fast implementation of the Cassowary constraint solver"
@@ -746,4 +760,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "195cc6118c29905dece42442de920fdbf10e2261d2e40b664b276f909233d7e1"
+content-hash = "08efbe111c206f0f051d6b1eae4b0d591011239f08527f1942a8b6bf52d6d769"

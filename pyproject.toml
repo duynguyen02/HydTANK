@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hydtank"
-version = "1.0.0"
+version = "1.0.1"
 description = "Python implementation of Tank Hydrological model by Sugawara and Funiyuki (1956)."
 authors = ["Duy Nguyen <duynguyen02.dev@gmail.com>"]
 repository = "https://github.com/duynguyen02/HydTANK"
@@ -13,6 +13,7 @@ pandas = "^2.2.3"
 networkx = "^3.4.2"
 matplotlib = "^3.9.2"
 spicy = "^0.16.0"
+hydutils = "^1.0.0"
 
 
 [build-system]
