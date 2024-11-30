@@ -130,14 +130,14 @@ class SinkParameters(Parameters):
 
 @dataclasses.dataclass
 class ReachParameters(Parameters):
-    k: float = 0.0
-    x: float = 0.0
+    k: float = 0.01
+    x: float = 0.01
 
     @staticmethod
     def get_bounds():
         bounds = (
-            (0.0, 5.0),  # k
-            (0.0, 0.5)  # x
+            (0.01, 5.0),  # k
+            (0.01, 0.5)  # x
         )
         return bounds
 
