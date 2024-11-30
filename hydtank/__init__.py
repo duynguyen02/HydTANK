@@ -2,58 +2,58 @@ from datetime import datetime
 from io import StringIO
 from typing import Optional
 
+from hydutils.hyd_constants import (
+    TIMESERIES,
+    PRECIPITATION,
+    EVAPOTRANSPIRATION,
+    DISCHARGE,
+)
 import pandas as pd
 
-from .basin_def_utils import extract_basin_file_data, extract_basin_defs_dict, build_basin_defs, build_root_node
-from .columns_constants import TIME_SERIES, PRECIPITATION, EVAPOTRANSPIRATION, DISCHARGE
-from .dataset import Dataset
-from .hydtank import HydTANK
+from hydtank.basin_def_utils import (
+    extract_basin_file_data,
+    extract_basin_defs_dict,
+    build_basin_defs,
+    build_root_node,
+)
+from hydtank.dataset import Dataset
+from hydtank.hydtank import HydTANK
 
 
 def _build_basin_defs_from_content(basin_content: str):
-    data = extract_basin_file_data(
-        basin_content
-    )
+    data = extract_basin_file_data(basin_content)
 
-    basin_defs_dict = extract_basin_defs_dict(
-        data
-    )
+    basin_defs_dict = extract_basin_defs_dict(data)
 
-    basin_defs = build_basin_defs(
-        basin_defs_dict
-    )
+    basin_defs = build_basin_defs(basin_defs_dict)
 
     return basin_defs
 
 
 def build_hydtank_from_dataset(
-        basin_content: str,
-        _dataset: Dataset,
-        interval: float = 24.0,
-        start: Optional[datetime] = None,
-        end: Optional[datetime] = None,
+    basin_content: str,
+    _dataset: Dataset,
+    interval: float = 24.0,
+    start: Optional[datetime] = None,
+    end: Optional[datetime] = None,
 ):
     basin_defs = _build_basin_defs_from_content(basin_content)
 
-    root_node = build_root_node(
-        basin_defs
-    )
+    root_node = build_root_node(basin_defs)
 
-    return HydTANK(
-        _dataset, basin_defs, root_node, interval, start, end
-    )
+    return HydTANK(_dataset, basin_defs, root_node, interval, start, end)
 
 
 def build_hydtank(
-        dataset_content: str,
-        basin_content: str,
-        interval: float = 24.0,
-        start: Optional[datetime] = None,
-        end: Optional[datetime] = None,
-        timeseries_column_name: str = TIME_SERIES,
-        precipitations_column_name: str = PRECIPITATION,
-        evapotranspirations_column_name: str = EVAPOTRANSPIRATION,
-        discharge_column_name: str = DISCHARGE,
+    dataset_content: str,
+    basin_content: str,
+    interval: float = 24.0,
+    start: Optional[datetime] = None,
+    end: Optional[datetime] = None,
+    timeseries_column_name: str = TIMESERIES,
+    precipitations_column_name: str = PRECIPITATION,
+    evapotranspirations_column_name: str = EVAPOTRANSPIRATION,
+    discharge_column_name: str = DISCHARGE,
 ):
     df = pd.read_csv(StringIO(dataset_content))
 
