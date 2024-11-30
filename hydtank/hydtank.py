@@ -4,6 +4,11 @@ from datetime import datetime
 from queue import Queue
 from typing import Optional, List, Literal, Union
 
+from hydutils.df_validation import (
+    validate_columns_for_nulls,
+    validate_interval,
+    filter_timeseries,
+)
 from hydutils.hyd_constants import (
     TIMESERIES,
     INTERVAL,
@@ -25,24 +30,6 @@ from hydtank.bsd_sink import Sink
 from hydtank.bsd_subbasin import Subbasin
 from hydtank.dataset import Dataset
 from hydtank.parameters import Parameters, SubbasinParameters, ReachParameters
-
-
-def validate_columns_data(df: pd.DataFrame):
-    for column in df.columns:
-        if df[column].isnull().any():
-            raise ValueError(
-                f"The column '{column}' contains missing data. Please ensure all columns are filled."
-            )
-    return df
-
-
-def validate_time_series(df: pd.DataFrame):
-    if not df[TIMESERIES].is_monotonic_increasing:
-        raise ValueError("The time series is not strictly increasing.")
-
-    time_diffs = df[TIMESERIES].diff().dropna()
-    if not time_diffs.nunique() == 1:
-        raise ValueError("The intervals between datetimes are not consistent.")
 
 
 class HydTANK:
@@ -103,68 +90,10 @@ class HydTANK:
     def copy(self):
         return copy.deepcopy(self)
 
-    def _filter_timeseries(self, df: pd.DataFrame):
-        df = df.copy()
-
-        start = self._start
-        end = self._end
-
-        if not pd.api.types.is_datetime64_any_dtype(df[TIMESERIES]):
-            raise ValueError("The TIME_SERIES column must be of datetime type.")
-
-        min_time = df[TIMESERIES].min()
-        max_time = df[TIMESERIES].max()
-
-        if start is not None and (start < min_time or start > max_time):
-            raise ValueError(
-                "The 'start' parameter is out of the DataFrame's time range."
-            )
-
-        if end is not None and (end < min_time or end > max_time):
-            raise ValueError(
-                "The 'end' parameter is out of the DataFrame's time range."
-            )
-
-        if start is not None and end is not None and end < start:
-            raise ValueError(
-                "The 'end' parameter cannot be earlier than the 'start' parameter."
-            )
-
-        if start is None and end is None:
-            return df
-        elif start is None:
-            return df[df[TIMESERIES] <= end]
-        elif end is None:
-            return df[df[TIMESERIES] >= start]
-        else:
-            return df[(df[TIMESERIES] >= start) & (df[TIMESERIES] <= end)]
-
-    def _validate_interval(self, df: pd.DataFrame):
-        df = df.copy()
-        df[INTERVAL] = df[TIMESERIES].diff()
-        interval_hours = pd.Timedelta(hours=self._interval)
-
-        invalid_intervals = df[INTERVAL] != interval_hours
-        invalid_intervals = invalid_intervals & ~df[INTERVAL].isna()
-
-        if invalid_intervals.any():
-            first_invalid_idx = invalid_intervals.idxmax()
-            row_before = df.loc[first_invalid_idx - 1, TIMESERIES]
-            row_invalid = df.loc[first_invalid_idx, TIMESERIES]
-
-            raise ValueError(
-                f"The intervals between datetimes are not consistent starting from row {first_invalid_idx}. "
-                f"Expected: {self._interval} hours, but got: {df.loc[first_invalid_idx, INTERVAL]}. "
-                f"Datetime mismatch: {row_before} -> {row_invalid}."
-            )
-
-        df = df.drop(columns=[INTERVAL])
-        return df
-
     def _validate_dataset_n_provide_dataframe(self):
         df = self._dataset.to_dataframe()
-        df = validate_columns_data(df)
-        df = self._validate_interval(df)
+        df = validate_columns_for_nulls(df)
+        df = validate_interval(df, self._interval)
         return df
 
     def _init_input(self, df: pd.DataFrame):
@@ -215,7 +144,7 @@ class HydTANK:
     def _run(self):
         self._logs = []
         df = self._validate_dataset_n_provide_dataframe()
-        df = self._filter_timeseries(df)
+        df = filter_timeseries(df, self._start, self._end)
         self._init_input(df)
         self._compute()
 
