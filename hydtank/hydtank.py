@@ -1,5 +1,6 @@
 import copy
 import io
+import uuid
 from datetime import datetime
 from queue import Queue
 from typing import Optional, List, Literal, Union
@@ -34,13 +35,13 @@ from hydtank.parameters import Parameters, SubbasinParameters, ReachParameters
 
 class HydTANK:
     def __init__(
-        self,
-        dataset: Dataset,
-        basin_defs: List[BasinDef],
-        root_node: List[BasinDef],
-        interval: float = 24.0,
-        start: Optional[datetime] = None,
-        end: Optional[datetime] = None,
+            self,
+            dataset: Dataset,
+            basin_defs: List[BasinDef],
+            root_node: List[BasinDef],
+            interval: float = 24.0,
+            start: Optional[datetime] = None,
+            end: Optional[datetime] = None,
     ):
         self._dataset = dataset
         self._basin_defs = basin_defs
@@ -54,6 +55,8 @@ class HydTANK:
         self._P: Optional[np.ndarray] = None
         self._E: Optional[np.ndarray] = None
         self._q_obs: Optional[np.ndarray] = None
+
+        self._name = uuid.uuid4().hex
 
         self._logs: List[str] = []
 
@@ -86,6 +89,14 @@ class HydTANK:
     @property
     def logs(self):
         return self._logs
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name: str):
+        self._name = name
 
     def copy(self):
         return copy.deepcopy(self)
@@ -152,7 +163,7 @@ class HydTANK:
         self._run()
 
     def _reconfig_by_stacked_parameters(
-        self, basin_defs: List[Union[Subbasin, Reach]], stacked_parameters: List[float]
+            self, basin_defs: List[Union[Subbasin, Reach]], stacked_parameters: List[float]
     ):
         subbasin_steps = len(SubbasinParameters().to_initial_params())
         reach_steps = len(ReachParameters().to_initial_params())
@@ -172,7 +183,7 @@ class HydTANK:
         self._run()
 
     def _optimize_operator(
-        self, stacked_parameters: List[float], basin_defs: List[Union[Subbasin, Reach]]
+            self, stacked_parameters: List[float], basin_defs: List[Union[Subbasin, Reach]]
     ):
         self._reconfig_by_stacked_parameters(basin_defs, stacked_parameters)
         _nse = 0
@@ -237,8 +248,8 @@ class HydTANK:
         basin_def = self.get_basin_def_by_name(name)
 
         if (
-            isinstance(basin_def, Subbasin)
-            and isinstance(parameters, SubbasinParameters)
+                isinstance(basin_def, Subbasin)
+                and isinstance(parameters, SubbasinParameters)
         ) or (isinstance(basin_def, Reach) and isinstance(parameters, ReachParameters)):
             basin_def.parameters = parameters
 
@@ -250,7 +261,7 @@ class HydTANK:
         self._run()
 
     def _generate_plot(
-        self, plot_data, xlabel="Timeseries", ylabel="Flow", figsize=(12, 6), title=None
+            self, plot_data, xlabel="Timeseries", ylabel="Flow", figsize=(12, 6), title=None
     ):
         plt.figure(figsize=figsize)
 
@@ -325,12 +336,12 @@ class HydTANK:
         return self._plot_basin_q(include_all=False)
 
     def plot_basin_network(
-        self,
-        layout_type: Literal[
-            "hierarchical", "circular", "spring", "kamada-kawai", "multipartite"
-        ] = "hierarchical",
-        figsize=(15, 10),
-        node_spacing=1.0,
+            self,
+            layout_type: Literal[
+                "hierarchical", "circular", "spring", "kamada-kawai", "multipartite"
+            ] = "hierarchical",
+            figsize=(15, 10),
+            node_spacing=1.0,
     ):
         color_map = {
             "Subbasin": "#7FB3D5",
