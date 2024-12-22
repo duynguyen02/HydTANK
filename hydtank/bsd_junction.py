@@ -10,7 +10,7 @@ class Junction(FlowNode):
             self, name: str,
             downstream: Optional[BasinDef] = None,
             upstream: Optional[List[BasinDef]] = None,
-            paramters: JunctionParameters = JunctionParameters()
+            parameters: JunctionParameters = JunctionParameters()
     ):
         super().__init__(name, downstream, upstream)
-        self._parameters = paramters
+        self._parameters = parameters
